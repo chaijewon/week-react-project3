@@ -5,7 +5,8 @@ class App2 extends Component{
         super(props);
         this.state={
             movie:[],
-            detail:{}
+            detail:{},
+            isShow:false
         }
     }
     // /movie_home?no=1
@@ -30,9 +31,13 @@ class App2 extends Component{
             console.log(this.state.movie)
         })
     }
+    onMovieDetail(m)
+    {
+        this.setState({detail:m,isShow:true});
+    }
     render() {
         const html=this.state.movie.map((m)=>
-           <tr>
+           <tr onMouseOver={this.onMovieDetail.bind(this,m)}>
                <td><img src={"http://www.kobis.or.kr"+m.thumbUrl} width={"35"} height={"35"}/></td>
                <td>{m.movieNm}</td>
                <td>{m.director}</td>
@@ -64,12 +69,74 @@ class App2 extends Component{
                    </table>
                  </div>
                  <div className={"col-sm-6"}>
-
+                     {this.state.isShow===true?<MovieDetail movie={this.state.detail}/>:null}
                 </div>
             </div>
           </Fragment>
       )
   }
 }
+// 상세보기
+/*
+      <App2 name=""/>
+      constructor(props) ==> this.props.name
+      {
 
+      }
+
+      <App2 name="">
+      function App2(props) => props.name
+      {
+      }
+ */
+class MovieDetail extends Component{
+    // detail
+    render() {
+        return (
+            <table className={"table"}>
+                <tbody>
+                  <tr>
+                      <td className={"text-center"} width={"30%"} rowSpan={"5"}>
+                          <img src={"http://www.kobis.or.kr"+this.props.movie.thumbUrl}
+                               width={"300"} height={"350"}/>
+                      </td>
+                      <td width={"70%"} colSpan={"2"}>
+                          <h2>{this.props.movie.movieNm}</h2>
+                          <sub style={{"color":"gray"}}>{this.props.movie.movieNmEn}</sub>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td width={"20%"}>감독</td>
+                      <td width={"50%"}>{this.props.movie.director}</td>
+                  </tr>
+                  <tr>
+                      <td width={"20%"}>장르</td>
+                      <td width={"50%"}>{this.props.movie.genre}</td>
+                  </tr>
+                  <tr>
+                      <td width={"20%"}>등급</td>
+                      <td width={"50%"}>{this.props.movie.watchGradeNm}</td>
+                  </tr>
+                  <tr>
+                      <td width={"20%"}>개봉일</td>
+                      <td width={"50%"}>{this.props.movie.startDate}</td>
+                  </tr>
+                  <tr>
+                      <td colSpan={"3"}>
+                          {this.props.movie.synop}
+                      </td>
+                  </tr>
+                </tbody>
+            </table>
+        )
+    }
+}
 export default App2;
+
+
+
+
+
+
+
+
